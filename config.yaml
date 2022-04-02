@@ -1,0 +1,9 @@
+logging:
+  level:
+    root: info
+schedule:
+  enabled: true
+  delay: 1000
+client-services:
+  service-list:
+geo-healthcheck:

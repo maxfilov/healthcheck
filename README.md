@@ -1,0 +1,1 @@
+[![codecov](https://codecov.io/gh/maxfilov/healthcheck/branch/master/graph/badge.svg?token=O7OR44GEGS)](https://codecov.io/gh/maxfilov/healthcheck)
