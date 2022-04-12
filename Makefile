@@ -14,9 +14,9 @@ cover: test
 	@echo "Displaying results"
 	@go tool cover -html ${COVERAGE_FILENAME}
 
-run: build
+run: rebuild
 	@echo "Starting the application"
-	@./${BUILD_DIR}/${EXECUTABLE_NAME} --config ./config.yaml
+	@./${BUILD_DIR}/${EXECUTABLE_NAME}
 
 test:
 	@echo "Running tests with coverage"

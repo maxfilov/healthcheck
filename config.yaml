@@ -2,7 +2,7 @@ logging:
   level:
     root: info
 schedule:
-  enabled: true
+  enabled: false
   delay: 1000
 client-services:
   service-list:
