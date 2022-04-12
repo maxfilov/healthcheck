@@ -3,7 +3,3 @@ logging:
     root: info
 schedule:
   enabled: false
-  delay: 1000
-client-services:
-  service-list:
-geo-healthcheck:
