@@ -15,7 +15,7 @@ FROM gcr.io/distroless/base-debian10
 
 WORKDIR /
 
-COPY --from=build /app/build/healthcheck /usr/bin/healthcheck
+COPY --from=build /app/bin/healthcheck /usr/bin/healthcheck
 COPY config.yaml /etc/healthcheck/config.yaml
 
 EXPOSE 8080

@@ -1,5 +1,5 @@
 COVERAGE_FILENAME=coverage.txt
-BUILD_DIR=build
+BUILD_DIR=bin
 EXECUTABLE_NAME=healthcheck
 GIT_HASH=$(shell git rev-parse HEAD)
 
