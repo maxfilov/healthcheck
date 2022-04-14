@@ -24,7 +24,7 @@ func MakeApplication(config *Config) (*Application, error) {
 	logger.Infof("configuration:\n%s", config.AsJson())
 	logLevel, err := logrus.ParseLevel(config.Logging.Level.Root)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("can not parse log level: %w", err)
 	}
 	logger.Infof("switching to log level '%s'", logLevel)
 	logger.SetLevel(logLevel)
@@ -35,11 +35,11 @@ func MakeApplication(config *Config) (*Application, error) {
 	if config.Schedule.Enabled {
 		fragileServices, err = makeServiceList(config.FailureThreshold, config.ClientServices.Services, logger)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("can not make service list: %w", err)
 		}
 		geoService, err = makeGeoService(config, logger)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("can not make geo-service: %w", err)
 		}
 		if geoService != nil {
 			fragileServices = append(fragileServices, geoService)
@@ -53,7 +53,7 @@ func MakeApplication(config *Config) (*Application, error) {
 		toFragiles(fragileServices),
 		geoService)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("can not make request handler: %w", err)
 	}
 	lifecycle := []Lifecycle{MakeServer(config.Server.Port, healthHandler, logger)}
 	if scheduler != nil {
@@ -74,7 +74,7 @@ func makeGeoService(config *Config, logger *logrus.Logger) (FragileService, erro
 	endpoint := fmt.Sprintf("%s:%d/health", configGeo.Service, configGeo.Port)
 	service, err := MakeSimpleService(endpoint, &http.Client{})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("can not make service for endpoint '%s': %w", endpoint, err)
 	}
 	loggingDecorator := MakeLoggingServiceDecorator(service, logger)
 	watchfulDecorator := MakeHopefulProxy(loggingDecorator, config.FailureThreshold)
@@ -89,7 +89,7 @@ func makeServiceList(threshold int, serviceDescriptions []ServiceDescription, lo
 		endpoint := fmt.Sprintf("http://%s:%d%s", srvDesc.Name, srvDesc.Port, srvDesc.Path)
 		actuatorService, err := MakeSimpleService(endpoint, &http.Client{})
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("can not make service for endpoint '%s', %w", endpoint, err)
 		}
 		loggingDecorator := MakeLoggingServiceDecorator(actuatorService, logger)
 		watchfulDecorator := MakeHopefulProxy(loggingDecorator, threshold)

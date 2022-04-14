@@ -34,7 +34,7 @@ func TestSimpleService_Check_CanNotMakeRequest(t *testing.T) {
 	if err == nil {
 		t.Errorf("Error is expected when URL is invalid")
 	}
-	if err.Error() != `can not create request object: parse "%$": invalid URL escape "%$"` {
+	if err.Error() != `can not make request object: parse "%$": invalid URL escape "%$"` {
 		t.Errorf("Unexpected error message '%s'", err.Error())
 	}
 }

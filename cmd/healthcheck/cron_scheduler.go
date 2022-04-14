@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	cron "github.com/go-co-op/gocron"
 	log "github.com/sirupsen/logrus"
 	"time"
@@ -17,7 +18,7 @@ func MakeScheduler(delay time.Duration, services []Service, logger log.FieldLogg
 		logger.Infof("polling the status of %s", service.Print())
 		_, err := scheduler.Every(int(delay / time.Millisecond)).Milliseconds().Do(service.Check)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("can not status polling job: %w", err)
 		}
 	}
 	return &CronScheduler{

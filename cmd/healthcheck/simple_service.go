@@ -18,7 +18,7 @@ type SimpleService struct {
 func MakeSimpleService(endpoint string, client *http.Client) (Service, error) {
 	request, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
-		return nil, fmt.Errorf("can not create request object: %s", err.Error())
+		return nil, fmt.Errorf("can not make request object: %w", err)
 	}
 	request.Header.Set("Accept", "application/json")
 	return &SimpleService{
@@ -36,7 +36,7 @@ func (srv *SimpleService) Print() string {
 func (srv *SimpleService) Check() error {
 	resp, err := srv.client.Do(srv.request)
 	if err != nil {
-		return fmt.Errorf("can not make request: %s", err.Error())
+		return fmt.Errorf("can not make request: %w", err)
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
@@ -49,7 +49,7 @@ func (srv *SimpleService) Check() error {
 	}
 	_, err = io.Copy(ioutil.Discard, resp.Body)
 	if err != nil {
-		return fmt.Errorf("could not read response from '%s': '%s'", srv.endpoint, err.Error())
+		return fmt.Errorf("could not read response from '%s': %w", srv.endpoint, err)
 	}
 	return nil
 }
