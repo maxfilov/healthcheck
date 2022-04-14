@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -16,16 +17,22 @@ func MakeHealthHandler(
 	namespace string,
 	fragiles []Fragile,
 	geo Fragile) (*HealthHandler, error) {
-	successString, _ := json.Marshal(map[string]string{
+	successString, err := json.Marshal(map[string]string{
 		"status":    "success",
 		"code":      "200",
 		"namespace": namespace,
 	})
-	errorString, _ := json.Marshal(map[string]string{
+	if err != nil {
+		return nil, fmt.Errorf("can not marshal sucess response: %w", err)
+	}
+	errorString, err := json.Marshal(map[string]string{
 		"status":    "error",
 		"code":      "500",
 		"namespace": namespace,
 	})
+	if err != nil {
+		return nil, fmt.Errorf("can not marshal error response: %w", err)
+	}
 	return &HealthHandler{
 		success:  successString,
 		error:    errorString,
